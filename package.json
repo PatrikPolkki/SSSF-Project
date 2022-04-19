@@ -1,0 +1,26 @@
+{
+  "name": "sssf-project",
+  "version": "1.0.0",
+  "description": "School project for server side scripting course",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrikPolkki/SSSF-Project.git"
+  },
+  "author": "Patrik Pölkki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PatrikPolkki/SSSF-Project/issues"
+  },
+  "homepage": "https://github.com/PatrikPolkki/SSSF-Project#readme",
+  "dependencies": {
+    "apollo-server-express": "^3.6.7",
+    "dotenv": "^16.0.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.3",
+    "mongoose": "^6.3.0"
+  }
+}
