@@ -6,14 +6,13 @@ export default gql`
   extend type Query {
     sportTypes: [SportType]
   }
+  
+  extend type Mutation {
+    addSportType(title: String): SportType
+  }
     
   type SportType {
     id: ID
-    title: String
-  }
-  
-  input SportTypeInput {
-    id: ID
-    title: String
+    title: String!
   }
 `;
