@@ -12,6 +12,7 @@ export default gql`
     addPost(postInfo: PostInfo): Post
     updatePost(id: ID!, postInfo: PostInfo): Post
     deletePost(id: ID!): Post
+    applyToPost(id: ID!, participantID: ID!): Post
   }
   
   type Post {
@@ -21,7 +22,7 @@ export default gql`
     description: String
     location: PointObject
     sport: SportType
-    applicants: [User]
+    participants: [User]
   }
   
   input PointObjectInput {
@@ -39,6 +40,6 @@ export default gql`
     description: String
     location: PointObjectInput
     sport: ID
-    applicants: [ID]
+    participants: [ID]
    }
 `;

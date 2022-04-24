@@ -21,7 +21,7 @@ const postSchema = new Schema({
     },
   },
   sport: {type: Schema.Types.ObjectId, ref: SportType},
-  applicants: [
+  participants: [
     {
       type: Schema.Types.ObjectId,
       ref: User,

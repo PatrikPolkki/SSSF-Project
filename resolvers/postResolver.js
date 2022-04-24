@@ -9,6 +9,7 @@ const Schema = mongoose.Schema;
 export default {
   Query: {
     posts: async (parent, args) => await Post.find(),
+    post: async (parent, args) => await Post.findById(args.id),
   },
 
   Mutation: {
@@ -26,7 +27,8 @@ export default {
     },
     updatePost: async (parent, args) => {
       try {
-        const post = await Post.findOneAndUpdate(args.id, args.postInfo);
+        const post = await Post.findOneAndUpdate(args.id, args.postInfo,
+            {returnDocument: 'after'});
         return post.save();
       } catch (err) {
         throw new Error(err);
@@ -35,6 +37,17 @@ export default {
     deletePost: async (parent, args) => {
       try {
         return Post.findOneAndDelete(args.id);
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    applyToPost: async (parent, args) => {
+      try {
+        const newParticipant = args.participantID;
+        console.log(newParticipant);
+        const updatedPost = await Post.findOneAndUpdate(args.id,
+            {$push: {participants: newParticipant}});
+        return updatedPost.save();
       } catch (err) {
         throw new Error(err);
       }

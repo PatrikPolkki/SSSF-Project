@@ -7,8 +7,8 @@ export default {
     owner: async (parent, args) => {
       return User.findById(parent.owner);
     },
-    applicants: async (parent, args) => {
-      return User.find({_id: {$in: parent.applicants}});
+    participants: async (parent, args) => {
+      return User.find({_id: {$in: parent.participants}});
     },
   },
   Query: {
