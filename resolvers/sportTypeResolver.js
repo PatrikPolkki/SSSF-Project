@@ -2,6 +2,11 @@
 import SportType from '../models/sportTypeModel';
 
 export default {
+  Post: {
+    sport: async (parent, args) => {
+      return SportType.findById(parent.sport);
+    },
+  },
   Query: {
     sportTypes: async (parent, args) => await SportType.find(),
   },

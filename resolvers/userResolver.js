@@ -3,6 +3,14 @@ import User from '../models/userModel';
 import bcrypt from 'bcrypt';
 
 export default {
+  Post: {
+    owner: async (parent, args) => {
+      return User.findById(parent.owner);
+    },
+    applicants: async (parent, args) => {
+      return User.find({_id: {$in: parent.applicants}});
+    },
+  },
   Query: {
     users: async (parent, args) => await User.find(),
 
