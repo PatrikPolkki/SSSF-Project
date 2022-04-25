@@ -12,7 +12,8 @@ export default gql`
     addPost(postInfo: PostInfo): Post
     updatePost(id: ID!, postInfo: PostInfo): Post
     deletePost(id: ID!): Post
-    applyToPost(id: ID!, participantID: ID!): Post
+    applyToPost(id: ID!, participantIDd: ID!): Post
+    leaveFromPost(id: ID!, participantId: ID!): Post  
   }
   
   type Post {

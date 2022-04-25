@@ -7,9 +7,9 @@ import User from './userModel';
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
-  owner: {type: Schema.Types.ObjectId, ref: User},
-  title: String,
-  description: String,
+  owner: {type: Schema.Types.ObjectId, ref: User, required: true},
+  title: {type: String, required: true},
+  description: {type: String, required: true},
   location: {
     type: {
       type: String,
@@ -20,11 +20,12 @@ const postSchema = new Schema({
       required: false,
     },
   },
-  sport: {type: Schema.Types.ObjectId, ref: SportType},
+  sport: {type: Schema.Types.ObjectId, ref: SportType, required: true},
   participants: [
     {
       type: Schema.Types.ObjectId,
       ref: User,
+      required: true,
     },
   ],
 });

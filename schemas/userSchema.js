@@ -15,12 +15,15 @@ export default gql`
       password: String!,
       full_name: String,
     ): User
+    appliedPost(id: ID!, postId: ID!): User
+    removeAppliedPost(id: ID!, postId: ID!): User
   }
 
   type User {
     id: ID
     username: String,
     full_name: String,
+    applied_sports: [Post]
     token: String
   }
 `;

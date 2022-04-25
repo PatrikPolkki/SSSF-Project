@@ -2,11 +2,15 @@
 
 import Post from '../models/postModel';
 import sportTypeResolver from './sportTypeResolver';
-import mongoose from 'mongoose';
-
-const Schema = mongoose.Schema;
 
 export default {
+  User: {
+    applied_sports: async (parent, args) => {
+      console.log(parent);
+      return Post.find({_id: {$in: parent.applied_sports}});
+    },
+  },
+
   Query: {
     posts: async (parent, args) => await Post.find(),
     post: async (parent, args) => await Post.findById(args.id),
@@ -43,10 +47,23 @@ export default {
     },
     applyToPost: async (parent, args) => {
       try {
-        const newParticipant = args.participantID;
+        const newParticipant = args.participantId;
         console.log(newParticipant);
         const updatedPost = await Post.findOneAndUpdate(args.id,
-            {$push: {participants: newParticipant}});
+            {$addToSet: {participants: newParticipant}},
+            {returnDocument: 'after'});
+        return updatedPost.save();
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    leaveFromPost: async (parent, args) => {
+      try {
+        const participant = args.participantId;
+        console.log(participant);
+        const updatedPost = await Post.findOneAndUpdate(args.id,
+            {$pull: {participants: participant}},
+            {returnDocument: 'after'});
         return updatedPost.save();
       } catch (err) {
         throw new Error(err);
