@@ -10,16 +10,8 @@ const postSchema = new Schema({
   owner: {type: Schema.Types.ObjectId, ref: User, required: true},
   title: {type: String, required: true},
   description: {type: String, required: true},
-  location: {
-    type: {
-      type: String,
-      default: 'Point',
-    },
-    coordinates: {
-      type: [Number],
-      required: false,
-    },
-  },
+  location: {type: String, required: true},
+  date: {type: String, required: true},
   sport: {type: Schema.Types.ObjectId, ref: SportType, required: true},
   participants: [
     {
