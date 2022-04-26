@@ -21,25 +21,18 @@ export default gql`
     owner: User
     title: String
     description: String
-    location: PointObject
+    location: String
+    date: String
     sport: SportType
     participants: [User]
-  }
-  
-  input PointObjectInput {
-    coordinates: [Float]
-  }
-
-  type PointObject {
-    coordinates: [Float]
-    type: String
   }
   
   input PostInfo {
     owner: ID
     title: String
     description: String
-    location: PointObjectInput
+    location: String
+    date: String
     sport: ID
     participants: [ID]
    }

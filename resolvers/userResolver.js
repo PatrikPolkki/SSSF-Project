@@ -1,6 +1,7 @@
 'use strict';
 import User from '../models/userModel';
 import bcrypt from 'bcrypt';
+import {login} from '../utils/auth';
 
 export default {
   Post: {
@@ -18,6 +19,10 @@ export default {
       console.log('userResolver', user);
       // find user by id
       return User.findById(args.id);
+    },
+    login: async (parent, args, {req}) => {
+      req.body = args;
+      return await login(req);
     },
   },
   Mutation: {

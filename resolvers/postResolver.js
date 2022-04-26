@@ -1,7 +1,7 @@
 'use strict';
 
 import Post from '../models/postModel';
-import sportTypeResolver from './sportTypeResolver';
+import {AuthenticationError} from 'apollo-server-express';
 
 export default {
   User: {
@@ -12,17 +12,22 @@ export default {
   },
 
   Query: {
-    posts: async (parent, args) => await Post.find(),
+    posts: async (parent, args, context) => {
+      console.log(' Context', context);
+      if (!context.user) {
+        throw new AuthenticationError('Not Authorized');
+      }
+      return Post.find();
+    },
     post: async (parent, args) => await Post.findById(args.id),
   },
 
   Mutation: {
-    addPost: async (parent, args) => {
+    addPost: async (parent, args, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('Not Authorized');
+      }
       try {
-        if (args.postInfo.sport === String) {
-          const newSportType = await sportTypeResolver.Mutation.addSportType(
-              args.postInfo.sport);
-        }
         const newPost = await new Post(args.postInfo);
         return newPost.save();
       } catch (err) {

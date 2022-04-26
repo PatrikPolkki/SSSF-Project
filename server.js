@@ -5,12 +5,21 @@ import db from './utils/db';
 import {ApolloServer} from 'apollo-server-express';
 import typeDefs from './schemas/index';
 import resolvers from './resolvers/index';
+import {checkAuth} from './utils/auth';
 
 (async () => {
   try {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
+      context: async ({req}) => {
+        if (req) {
+          const user = await checkAuth(req);
+          // const user = true;
+          console.log('app', user);
+          return {req, user};
+        }
+      },
     });
 
     const app = express();
