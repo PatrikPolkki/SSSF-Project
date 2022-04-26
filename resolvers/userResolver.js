@@ -7,8 +7,8 @@ export default {
     owner: async (parent, args) => {
       return User.findById(parent.owner);
     },
-    applicants: async (parent, args) => {
-      return User.find({_id: {$in: parent.applicants}});
+    participants: async (parent, args) => {
+      return User.find({_id: {$in: parent.participants}});
     },
   },
   Query: {
@@ -31,6 +31,30 @@ export default {
         };
         const newUser = new User(userWithHash);
         return await newUser.save();
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    appliedPost: async (parent, args) => {
+      try {
+        const appliedPostId = args.postId;
+        console.log(appliedPostId);
+        const updatedUser = await User.findOneAndUpdate(args.id,
+            {$addToSet: {applied_sports: appliedPostId}},
+            {returnDocument: 'after'});
+        return updatedUser.save();
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    removeAppliedPost: async (parent, args) => {
+      try {
+        const appliedPostId = args.postId;
+        console.log(appliedPostId);
+        const updatedUser = await User.findOneAndUpdate(args.id,
+            {$pull: {applied_sports: appliedPostId}},
+            {returnDocument: 'after'});
+        return updatedUser.save();
       } catch (err) {
         throw new Error(err);
       }
