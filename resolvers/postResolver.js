@@ -13,7 +13,6 @@ export default {
 
   Query: {
     posts: async (parent, args, context) => {
-      console.log(' Context', context);
       if (!context.user) {
         throw new AuthenticationError('Not Authorized');
       }
@@ -70,7 +69,8 @@ export default {
             {$pull: {participants: participant}},
             {returnDocument: 'after'});
         return updatedPost.save();
-      } catch (err) {
+      } catch
+          (err) {
         throw new Error(err);
       }
     },
