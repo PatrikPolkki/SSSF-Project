@@ -1,6 +1,7 @@
 'use strict';
 
 import Post from '../models/postModel';
+import User from '../models/userModel';
 import {AuthenticationError} from 'apollo-server-express';
 
 export default {
@@ -13,6 +14,7 @@ export default {
 
   Query: {
     posts: async (parent, args, context) => {
+      console.log('CONTEXT', context.user);
       if (!context.user) {
         throw new AuthenticationError('Not Authorized');
       }
@@ -56,6 +58,11 @@ export default {
         const updatedPost = await Post.findOneAndUpdate(args.id,
             {$addToSet: {participants: newParticipant}},
             {returnDocument: 'after'});
+
+        const updatedUser = await User.findOneAndUpdate(args.participantId,
+            {$addToSet: {applied_sports: args.id}},
+            {returnDocument: 'after'});
+        await updatedUser.save();
         return updatedPost.save();
       } catch (err) {
         throw new Error(err);
@@ -68,7 +75,7 @@ export default {
         const updatedPost = await Post.findOneAndUpdate(args.id,
             {$pull: {participants: participant}},
             {returnDocument: 'after'});
-        return updatedPost.save();
+        return await updatedPost.save();
       } catch
           (err) {
         throw new Error(err);

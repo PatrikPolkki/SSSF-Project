@@ -2,7 +2,7 @@
 
 import passport from 'passport';
 import {Strategy} from 'passport-local';
-import {ExtractJwt} from 'passport-jwt';
+import {ExtractJwt, Strategy as JWTStrategy} from 'passport-jwt';
 import User from '../models/userModel';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
@@ -32,9 +32,9 @@ passport.use(
 
 passport.use(
     'jwt',
-    new Strategy({
+    new JWTStrategy({
           jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-          secretKey: process.env.SECRET_KEY,
+          secretOrKey: process.env.SECRET_KEY,
         },
         (payload, done) => {
           console.log('JWT payload', payload);

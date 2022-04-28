@@ -1,6 +1,6 @@
 'use strict';
 
-import passport from '../utils/pass';
+import passport from './pass';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
@@ -19,6 +19,7 @@ const login = (req) => {
           reject(err);
         }
         const token = jwt.sign(req.user, process.env.SECRET_KEY);
+        console.log('SECRET KEY', process.env.SECRET_KEY);
         resolve({...user, token, id: user._id});
       });
     })(req);
@@ -27,7 +28,8 @@ const login = (req) => {
 
 const checkAuth = (req) => {
   return new Promise((resolve) => {
-    passport.authenticate('jwt', (err, user) => {
+    passport.authenticate('jwt', {session: false}, (err, user, info) => {
+      console.log('USER', user);
       if (err || !user) {
         resolve(false);
       }
