@@ -21,6 +21,18 @@ export default {
       return Post.find();
     },
     post: async (parent, args) => await Post.findById(args.id),
+    postByUser: async (parent, args, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('Not Authorized');
+      }
+      return Post.find({owner: args.id});
+    },
+    appliedPosts: async (parent, args, context) => {
+      if (!context.user) {
+        throw new AuthenticationError('Not Authorized');
+      }
+      return Post.find({participants: {$in: args.id}});
+    },
   },
 
   Mutation: {
@@ -28,6 +40,7 @@ export default {
       if (!context.user) {
         throw new AuthenticationError('Not Authorized');
       }
+      console.log('postInfo', args.postInfo);
       try {
         const newPost = await new Post(args.postInfo);
         return newPost.save();
@@ -55,15 +68,17 @@ export default {
       try {
         const newParticipant = args.participantId;
         console.log(newParticipant);
-        const updatedPost = await Post.findOneAndUpdate(args.id,
-            {$addToSet: {participants: newParticipant}},
+        console.log('POSTID', args.id);
+        const updatedPost = await Post.findOneAndUpdate({_id: args.id},
+            {$push: {participants: newParticipant}},
             {returnDocument: 'after'});
 
-        const updatedUser = await User.findOneAndUpdate(args.participantId,
-            {$addToSet: {applied_sports: args.id}},
+        const updatedUser = await User.findOneAndUpdate(
+            {_id: args.participantId},
+            {$push: {applied_sports: args.id}},
             {returnDocument: 'after'});
         await updatedUser.save();
-        return updatedPost.save();
+        return await updatedPost.save();
       } catch (err) {
         throw new Error(err);
       }

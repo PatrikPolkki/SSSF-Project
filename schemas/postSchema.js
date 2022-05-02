@@ -6,13 +6,15 @@ export default gql`
   extend type Query {
     posts: [Post]
     post(id: ID!): Post
+    postByUser(id: ID): [Post]
+    appliedPosts(id: ID): [Post]
   }
   
   extend type Mutation {
     addPost(postInfo: PostInfo): Post
     updatePost(id: ID!, postInfo: PostInfo): Post
     deletePost(id: ID!): Post
-    applyToPost(id: ID!, participantIDd: ID!): Post
+    applyToPost(id: ID!, participantId: ID!): Post
     leaveFromPost(id: ID!, participantId: ID!): Post  
   }
   

@@ -29,7 +29,6 @@ const login = (req) => {
 const checkAuth = (req) => {
   return new Promise((resolve) => {
     passport.authenticate('jwt', {session: false}, (err, user, info) => {
-      console.log('USER', user);
       if (err || !user) {
         resolve(false);
       }
