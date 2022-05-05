@@ -3,6 +3,7 @@
 import https from 'https';
 import http from 'http';
 import fs from 'fs';
+import {initIO} from './socket';
 
 const httpsPort = process.env.HTTPS_PORT || 8000;
 
@@ -15,9 +16,8 @@ const options = {
 };
 
 export default (app, port) => {
-  https.createServer(options, app).listen(httpsPort, () => console.log(
-      `Localhost secure app listening port ${httpsPort}`),
-  );
+  const httpsServer = https.createServer(options, app);
+  initIO(httpsServer, httpsPort);
 
   http.createServer((req, res) => {
     res.writeHead(301,
