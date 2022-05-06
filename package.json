@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/PatrikPolkki/SSSF-Project#readme",
   "dependencies": {
+    "apollo-server-core": "^3.7.0",
     "apollo-server-express": "^3.6.7",
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",

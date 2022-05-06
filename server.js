@@ -7,6 +7,7 @@ import typeDefs from './schemas/index';
 import resolvers from './resolvers/index';
 import {checkAuth} from './utils/auth';
 import helmet from 'helmet';
+import {ApolloServerPluginLandingPageLocalDefault} from 'apollo-server-core';
 
 const port = process.env.HTTP_PORT || 3000;
 
@@ -16,6 +17,11 @@ const port = process.env.HTTP_PORT || 3000;
         {
           typeDefs,
           resolvers,
+          plugins: [
+            process.env.NODE_ENV === 'production'
+                ? ApolloServerPluginLandingPageLocalDefault
+                : ApolloServerPluginLandingPageLocalDefault,
+          ],
           context: async ({req}) => {
             if (req) {
               const user = await checkAuth(req);
