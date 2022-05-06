@@ -1,5 +1,8 @@
 'use strict';
 
+import http from 'http';
+import {initIO} from './socket';
+
 export default (app, port) => {
   app.enable('trust proxy');
 
@@ -11,5 +14,7 @@ export default (app, port) => {
     }
   });
 
-  app.listen(port, () => { console.log(`app listen on port ${port}`);});
+  const httpServer = http.createServer(app);
+  initIO(httpServer, port);
+  //app.listen(port, () => { console.log(`app listen on port ${port}`);});
 };

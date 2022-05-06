@@ -3,18 +3,17 @@
 import Post from '../models/postModel';
 import User from '../models/userModel';
 import {AuthenticationError} from 'apollo-server-express';
+import {io} from '../utils/socket';
 
 export default {
   User: {
     applied_sports: async (parent, args) => {
-      console.log(parent);
       return Post.find({_id: {$in: parent.applied_sports}}).sort({_id: -1});
     },
   },
 
   Query: {
     posts: async (parent, args, context) => {
-      console.log('CONTEXT', context.user);
       if (!context.user) {
         throw new AuthenticationError('Not Authorized');
       }
@@ -52,7 +51,6 @@ export default {
             {_id: args.postInfo.owner},
             {$push: {applied_sports: newPost.id}},
             {returnDocument: 'after'});
-        console.log('USER', args);
         await updatedUser.save();
         return await newPost.save();
       } catch (err) {
@@ -89,16 +87,22 @@ export default {
         const newParticipant = args.participantId;
 
         const updatedPost = await Post.findOneAndUpdate({_id: args.id},
-            {$push: {participants: newParticipant}},
+            {$addToSet: {participants: newParticipant}},
             {returnDocument: 'after'});
 
         const updatedUser = await User.findOneAndUpdate(
             {_id: args.participantId},
-            {$push: {applied_sports: args.id}},
+            {$addToSet: {applied_sports: args.id}},
             {returnDocument: 'after'});
 
         await updatedUser.save();
-        return await updatedPost.save();
+        const saved = await updatedPost.save();
+        try {
+          io.emit(args.id, saved.participants.length);
+        } catch (e) {
+          console.error('socket', e);
+        }
+        return saved;
       } catch (err) {
         throw new Error(err);
       }
@@ -121,7 +125,13 @@ export default {
             {returnDocument: 'after'});
 
         await updatedUser.save();
-        return await updatedPost.save();
+        const saved = await updatedPost.save();
+        try {
+          io.emit(args.id, saved.participants.length);
+        } catch (e) {
+          console.error('socket', e);
+        }
+        return saved;
       } catch
           (err) {
         throw new Error(err);
