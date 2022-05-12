@@ -72,6 +72,55 @@ mutation AddPost($postInfo: PostInfo) {
     "sport": "some sporttype id"
   }
 ```
+
+### update post
+```
+mutation UpdatePost($updatePostId: ID!, $postInfo: PostInfo) {
+  updatePost(id: $updatePostId, postInfo: $postInfo) {
+    id
+    title
+  }
+}
+
+"postInfo": {
+    "owner": "some user id",
+    "title": "something",
+    "description": "something",
+    "location": "something",
+    "date": "something",
+    "sport": "some sporttype id"
+  }
+```
+
+### delete post
+```
+mutation DeletePost($deletePostId: ID!) {
+  deletePost(id: $deletePostId) {
+    id
+    title
+  }
+}
+```
+### get sportTypes
+```
+query Query {
+  sportTypes {
+    id
+    title
+  }
+}
+```
+
+### add sportType
+```
+mutation AddSportType($title: String) {
+  addSportType(title: $title) {
+    id
+    title
+  }
+}
+```
+
 ### apply to post
 ```
 mutation ApplyToPost($applyToPostId: ID!, $participantId: ID!) {
